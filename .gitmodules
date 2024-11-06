@@ -13,3 +13,6 @@
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/Openzeppelin/openzeppelin-contracts
+[submodule "packages/foundry/lib/solmate"]
+	path = packages/foundry/lib/solmate
+	url = https://github.com/transmissions11/solmate
