@@ -21,6 +21,7 @@ contract NFT is ERC721, ERC721Enumerable {
         require(_nextTokenId < maxSupply, "Max supply reached");
         require(!alreadyMinted[to], "Already minted");
         uint256 tokenId = _nextTokenId++;
+        alreadyMinted[to] = true;
         _safeMint(to, tokenId);
     }
 
