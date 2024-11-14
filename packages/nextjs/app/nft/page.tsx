@@ -6,6 +6,7 @@ import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { useWriteContracts } from "wagmi/experimental";
 import { useDeployedContractInfo, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 
 const Debug: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -66,6 +67,7 @@ const Debug: NextPage = () => {
                             },
                           },
                         });
+                        notification.success("NFT minted");
                       } catch (e) {
                         console.error("Error minting NFT:", e);
                       }
