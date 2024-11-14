@@ -5,13 +5,14 @@ import "../contracts/NFT.sol";
 import "./DeployHelpers.s.sol";
 
 contract DeployNFT is ScaffoldETHDeploy {
-  // use `deployer` from `ScaffoldETHDeploy`
-  function run() external ScaffoldEthDeployerRunner {
-    NFT nftContract = new NFT("My NFT", "MNFT");
-    console.logString(
-      string.concat(
-        "NFT contract deployed at: ", vm.toString(address(nftContract))
-      )
-    );
-  }
+    // use `deployer` from `ScaffoldETHDeploy`
+    function run() external ScaffoldEthDeployerRunner {
+        NFT nftContract = new NFT();
+        console.logString(
+            string.concat(
+                "NFT contract deployed at: ",
+                vm.toString(address(nftContract))
+            )
+        );
+    }
 }
