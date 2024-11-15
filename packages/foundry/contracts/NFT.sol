@@ -1,26 +1,48 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.20;
+// SPDX-License-Identifier: MIT
+// Compatible with OpenZeppelin Contracts ^5.0.0
+pragma solidity ^0.8.22;
 
-import {ERC721} from "solmate/tokens/ERC721.sol";
-import {Strings} from "openzeppelin-contracts/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-contract NFT is ERC721 {
-    uint256 public currentTokenId;
+contract NFT is ERC721, ERC721Enumerable {
+    uint256 public _nextTokenId;
     uint256 public constant maxSupply = 10; // Set the max supply to 10
+    mapping(address => bool) public alreadyMinted; // Keep track
 
-    constructor(
-        string memory _name,
-        string memory _symbol
-    ) ERC721(_name, _symbol) {}
+    constructor() ERC721("MyToken", "MTK") {}
 
-    function mintTo(address recipient) public payable returns (uint256) {
-        require(currentTokenId < maxSupply, "Max supply reached");
-        uint256 newItemId = ++currentTokenId;
-        _safeMint(recipient, newItemId);
-        return newItemId;
+    function _baseURI() internal pure override returns (string memory) {
+        return
+            "https://cdn.britannica.com/33/226533-050-404C15AF/Canary-on-pear-branch.jpg";
     }
 
-    function tokenURI(uint256 id) public view virtual override returns (string memory) {
-        return Strings.toString(id);
+    function safeMint(address to) public {
+        require(_nextTokenId < maxSupply, "Max supply reached");
+        require(!alreadyMinted[to], "Already minted");
+        uint256 tokenId = _nextTokenId++;
+        alreadyMinted[to] = true;
+        _safeMint(to, tokenId);
+    }
+
+    function _update(
+        address to,
+        uint256 tokenId,
+        address auth
+    ) internal override(ERC721, ERC721Enumerable) returns (address) {
+        return super._update(to, tokenId, auth);
+    }
+
+    function _increaseBalance(
+        address account,
+        uint128 value
+    ) internal override(ERC721, ERC721Enumerable) {
+        super._increaseBalance(account, value);
+    }
+
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override(ERC721, ERC721Enumerable) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }
 }
